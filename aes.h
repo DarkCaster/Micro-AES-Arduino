@@ -1,14 +1,16 @@
 #ifndef AES_H_
 #define AES_H_
 
-#include <stdint.h>
+#include <Arduino.h>
 
 #define AES_256_ROUNDS 14
 #define AES_192_ROUNDS 12
 #define AES_128_ROUNDS 10
 
 // Uncomment this (or compile with -DOPT_8_BIT) to optimise for an 8 bit architecture
-// #define AES_OPT_8_BIT
+#ifdef ARDUINO_ARCH_AVR
+#define AES_OPT_8_BIT
+#endif
 
 #ifdef AES_OPT_8_BIT
   typedef uint8_t counter;
