@@ -58,14 +58,14 @@ const uint8_t rcon[10] TARGET_FLASH_MEMORY = { 0x01, 0x02, 0x04, 0x08, 0x10, 0x2
 
 // AES Operation Definitions
 
-void aes_Rotate        (uint8_t block[4]);
-void aes_SubBytes      (uint8_t state[16]);
-void aes_InvSubBytes   (uint8_t state[16]);
-void aes_ShiftRows     (uint8_t state[16]);
-void aes_InvShiftRows  (uint8_t state[16]);
-void aes_MixColumns    (uint8_t state[16]);
-void aes_InvMixColumns (uint8_t state[16]);
-void aes_AddRoundKey   (uint8_t state[16], uint8_t sub_key[16]);
+void aes_Rotate        (uint8_t * const block);
+void aes_SubBytes      (uint8_t * const state);
+void aes_InvSubBytes   (uint8_t * const state);
+void aes_ShiftRows     (uint8_t * const state);
+void aes_InvShiftRows  (uint8_t * const state);
+void aes_MixColumns    (uint8_t * const state);
+void aes_InvMixColumns (uint8_t * const state);
+void aes_AddRoundKey   (uint8_t * const state, const uint8_t * const sub_key);
 
 // Maths Operation Definitions
 
@@ -73,7 +73,7 @@ uint8_t aes_GaloisFieldMultiply (uint8_t fixed, uint8_t variable);
 
 // AES Core Procedures
 
-void aes_init(uint32_t *round_key, counter b, const uint32_t * const key, counter n)
+void aes_init(uint32_t * const round_key, counter b, const uint32_t * const key, counter n)
 {
   uint32_t t;
   counter i, position, cycle;
@@ -96,7 +96,7 @@ void aes_init(uint32_t *round_key, counter b, const uint32_t * const key, counte
   }
 }
 
-void aes_encrypt(uint8_t *round_key, uint8_t block[16], counter rounds)
+void aes_encrypt(const uint8_t * const round_key, uint8_t * const block, const counter rounds)
 {
   counter i;
 
@@ -114,7 +114,7 @@ void aes_encrypt(uint8_t *round_key, uint8_t block[16], counter rounds)
   aes_AddRoundKey(block, round_key + (i << 4));
 }
 
-void aes_decrypt(uint8_t *round_key, uint8_t block[16], counter rounds)
+void aes_decrypt(const uint8_t * const round_key, uint8_t * const block, const counter rounds)
 {
   counter i;
 
@@ -134,54 +134,54 @@ void aes_decrypt(uint8_t *round_key, uint8_t block[16], counter rounds)
 
 // AES Key Specific API
 
-void aes_256_init(aes_256_context_t *context, const uint8_t * const key)
+void aes_256_init(aes_256_context_t * const context, const uint8_t * const key)
 {
   aes_init((uint32_t *) context->round_key, sizeof(context->round_key) / sizeof(uint32_t), (uint32_t *) key, 8);
 }
 
-void aes_256_encrypt(aes_256_context_t *context, uint8_t block[16])
+void aes_256_encrypt(const aes_256_context_t * const context, uint8_t * const block)
 {
   aes_encrypt(context->round_key, block, AES_256_ROUNDS);
 }
 
-void aes_256_decrypt(aes_256_context_t *context, uint8_t block[16])
+void aes_256_decrypt(const aes_256_context_t * const context, uint8_t * const block)
 {
   aes_decrypt(context->round_key, block, AES_256_ROUNDS);
 }
 
-void aes_192_init(aes_192_context_t *context, const uint8_t * const key)
+void aes_192_init(aes_192_context_t * const context, const uint8_t * const key)
 {
   aes_init((uint32_t *) context->round_key, sizeof(context->round_key) / sizeof(uint32_t), (uint32_t *) key, 6);
 }
 
-void aes_192_encrypt(aes_192_context_t *context, uint8_t block[16])
+void aes_192_encrypt(const aes_192_context_t * const context, uint8_t * const block)
 {
   aes_encrypt(context->round_key, block, AES_192_ROUNDS);
 }
 
-void aes_192_decrypt(aes_192_context_t *context, uint8_t block[16])
+void aes_192_decrypt(const aes_192_context_t * const context, uint8_t * const block)
 {
   aes_decrypt(context->round_key, block, AES_192_ROUNDS);
 }
 
-void aes_128_init(aes_128_context_t *context, const uint8_t * const key)
+void aes_128_init(aes_128_context_t * const context, const uint8_t * const key)
 {
   aes_init((uint32_t *) context->round_key, sizeof(context->round_key) / sizeof(uint32_t), (uint32_t *) key, 4);
 }
 
-void aes_128_encrypt(aes_128_context_t *context, uint8_t block[16])
+void aes_128_encrypt(const aes_128_context_t * const context, uint8_t * const block)
 {
   aes_encrypt(context->round_key, block, AES_128_ROUNDS);
 }
 
-void aes_128_decrypt(aes_128_context_t *context, uint8_t block[16])
+void aes_128_decrypt(const aes_128_context_t * const context, uint8_t * const block)
 {
   aes_decrypt(context->round_key, block, AES_128_ROUNDS);
 }
 
 // AES Operation Implementations
 
-void aes_Rotate(uint8_t block[4])
+void aes_Rotate(uint8_t * const block)
 {
   uint8_t tmp;
 
@@ -192,7 +192,7 @@ void aes_Rotate(uint8_t block[4])
   block[3] = tmp;
 }
 
-void aes_SubBytes(uint8_t state[16])
+void aes_SubBytes(uint8_t * const state)
 {
   counter i = 16;
 
@@ -201,7 +201,7 @@ void aes_SubBytes(uint8_t state[16])
   }
 }
 
-void aes_InvSubBytes(uint8_t state[16])
+void aes_InvSubBytes(uint8_t * const state)
 {
   counter i = 16;
 
@@ -210,7 +210,7 @@ void aes_InvSubBytes(uint8_t state[16])
   }
 }
 
-void aes_ShiftRows(uint8_t state[16])
+void aes_ShiftRows(uint8_t * const state)
 {
   uint8_t tmp;
 
@@ -235,7 +235,7 @@ void aes_ShiftRows(uint8_t state[16])
   state[MAP(3,1)] = tmp;
 }
 
-void aes_InvShiftRows(uint8_t state[16])
+void aes_InvShiftRows(uint8_t * const state)
 {
   uint8_t tmp;
 
@@ -260,7 +260,7 @@ void aes_InvShiftRows(uint8_t state[16])
   state[MAP(1,1)] = tmp;
 }
 
-void aes_MixColumns(uint8_t state[16])
+void aes_MixColumns(uint8_t * const state)
 {
   counter i = 4;
   uint8_t new_state[4];
@@ -278,7 +278,7 @@ void aes_MixColumns(uint8_t state[16])
   }
 }
 
-void aes_InvMixColumns(uint8_t state[16])
+void aes_InvMixColumns(uint8_t * const state)
 {
   counter i = 4;
   uint8_t new_state[4];
@@ -296,7 +296,7 @@ void aes_InvMixColumns(uint8_t state[16])
   }
 }
 
-void aes_AddRoundKey(uint8_t state[16], uint8_t sub_key[16])
+void aes_AddRoundKey(uint8_t * const state, const uint8_t * const sub_key)
 {
 #ifdef AES_OPT_8_BIT
 
