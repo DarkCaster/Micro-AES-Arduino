@@ -73,7 +73,7 @@ uint8_t aes_GaloisFieldMultiply (uint8_t fixed, uint8_t variable);
 
 // AES Core Procedures
 
-void aes_init(uint32_t *round_key, counter b, uint32_t *key, counter n)
+void aes_init(uint32_t *round_key, counter b, const uint32_t * const key, counter n)
 {
   uint32_t t;
   counter i, position, cycle;
@@ -134,7 +134,7 @@ void aes_decrypt(uint8_t *round_key, uint8_t block[16], counter rounds)
 
 // AES Key Specific API
 
-void aes_256_init(aes_256_context_t *context, uint8_t key[32])
+void aes_256_init(aes_256_context_t *context, const uint8_t * const key)
 {
   aes_init((uint32_t *) context->round_key, sizeof(context->round_key) / sizeof(uint32_t), (uint32_t *) key, 8);
 }
@@ -149,7 +149,7 @@ void aes_256_decrypt(aes_256_context_t *context, uint8_t block[16])
   aes_decrypt(context->round_key, block, AES_256_ROUNDS);
 }
 
-void aes_192_init(aes_192_context_t *context, uint8_t key[24])
+void aes_192_init(aes_192_context_t *context, const uint8_t * const key)
 {
   aes_init((uint32_t *) context->round_key, sizeof(context->round_key) / sizeof(uint32_t), (uint32_t *) key, 6);
 }
@@ -164,7 +164,7 @@ void aes_192_decrypt(aes_192_context_t *context, uint8_t block[16])
   aes_decrypt(context->round_key, block, AES_192_ROUNDS);
 }
 
-void aes_128_init(aes_128_context_t *context, uint8_t key[16])
+void aes_128_init(aes_128_context_t *context, const uint8_t * const key)
 {
   aes_init((uint32_t *) context->round_key, sizeof(context->round_key) / sizeof(uint32_t), (uint32_t *) key, 4);
 }

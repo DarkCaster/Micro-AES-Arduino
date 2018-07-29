@@ -24,7 +24,7 @@ typedef struct aes_256_context_t_ {
   uint8_t round_key[(AES_256_ROUNDS + 1) * 16];
 } aes_256_context_t;
 
-void aes_256_init    (aes_256_context_t *context, uint8_t key[32]);
+void aes_256_init    (aes_256_context_t *context, const uint8_t * const key);
 void aes_256_encrypt (aes_256_context_t *context, uint8_t block[16]);
 void aes_256_decrypt (aes_256_context_t *context, uint8_t block[16]);
 
@@ -34,7 +34,7 @@ typedef struct aes_192_context_t_ {
   uint8_t round_key[(AES_192_ROUNDS + 1) * 16];
 } aes_192_context_t;
 
-void aes_192_init    (aes_192_context_t *context, uint8_t key[24]);
+void aes_192_init    (aes_192_context_t *context, const uint8_t * const key);
 void aes_192_encrypt (aes_192_context_t *context, uint8_t block[16]);
 void aes_192_decrypt (aes_192_context_t *context, uint8_t block[16]);
 
@@ -44,7 +44,7 @@ typedef struct aes_128_context_t_ {
   uint8_t round_key[(AES_128_ROUNDS + 1) * 16];
 } aes_128_context_t;
 
-void aes_128_init    (aes_128_context_t *context, uint8_t key[16]);
+void aes_128_init    (aes_128_context_t *context, const uint8_t * const key);
 void aes_128_encrypt (aes_128_context_t *context, uint8_t block[16]);
 void aes_128_decrypt (aes_128_context_t *context, uint8_t block[16]);
 
