@@ -7,7 +7,7 @@
   #define READ_FLASH_MEMORY(target) (pgm_read_byte(target))
 #else
   #define TARGET_FLASH_MEMORY
-  #define READ_FLASH_MEMORY(target) (target)
+  #define READ_FLASH_MEMORY(target) (*(target))
 #endif
 
 
