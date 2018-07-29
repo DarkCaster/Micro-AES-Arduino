@@ -3,6 +3,10 @@
 
 #include <Arduino.h>
 
+#ifdef __cplusplus
+extern "C"{
+#endif
+
 #define AES_256_ROUNDS 14
 #define AES_192_ROUNDS 12
 #define AES_128_ROUNDS 10
@@ -47,6 +51,10 @@ typedef struct aes_128_context_t_ {
 void aes_128_init    (aes_128_context_t *context, const uint8_t * const key);
 void aes_128_encrypt (aes_128_context_t *context, uint8_t block[16]);
 void aes_128_decrypt (aes_128_context_t *context, uint8_t block[16]);
+
+#ifdef __cplusplus
+} // extern "C"
+#endif
 
 #endif
 
