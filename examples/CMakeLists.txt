@@ -1,11 +1,5 @@
 project(MicroAESTestUtil C CXX)
-cmake_minimum_required(VERSION 2.8)
-
-if(NOT((${CMAKE_GENERATOR} STREQUAL "Unix Makefiles") OR (${CMAKE_GENERATOR} STREQUAL "MSYS Makefiles") OR (${CMAKE_GENERATOR} STREQUAL "MinGW Makefiles")))
-  message(FATAL_ERROR "Chosen generator is not supported for this project")
-endif()
-
-message(STATUS "Building for ${CMAKE_SYSTEM_NAME}. Processor architecture is ${CMAKE_SYSTEM_PROCESSOR}")
+cmake_minimum_required(VERSION 3.0)
 
 #set some custom options and default values
 set(ARCHSUFFIX ".${CMAKE_SYSTEM_PROCESSOR}")
@@ -31,15 +25,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/build")
 file(MAKE_DIRECTORY ${CMAKE_RUNTIME_OUTPUT_DIRECTORY})
 file(MAKE_DIRECTORY ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 
-#print status
-message(STATUS "Current build configuration:")
-message(STATUS "CMAKE_GENERATOR=${CMAKE_GENERATOR}")
-message(STATUS "CMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR}")
-message(STATUS "CMAKE_BINARY_DIR=${CMAKE_BINARY_DIR}")
-message(STATUS "CMAKE_ARCHIVE_OUTPUT_DIRECTORY=${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
-message(STATUS "CMAKE_LIBRARY_OUTPUT_DIRECTORY=${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
-message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY=${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
-
 include_directories("${CMAKE_SOURCE_DIR}")
 include_directories("${CMAKE_SOURCE_DIR}/..")
 
@@ -56,6 +41,5 @@ if(CMAKE_COMPILER_IS_GNUCXX)
   set(EXELINKFLAGS "-Wl,-rpath-link,'${CMAKE_LIBRARY_OUTPUT_DIRECTORY}'")
 endif()
 
-#emu util
+#test util
 add_executable(AesTestUtil main.cpp ../aes.c)
-###target_link_libraries(TODO)
